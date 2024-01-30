@@ -19,21 +19,22 @@ st.sidebar.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</styl
 
 st.header('Stock analysis')
 
-asset_type = st.sidebar.radio('Choose the type of asset',['FIIs','Stocks'], index=None)
+asset_type = st.sidebar.radio('Choose the type of asset',['FIIs','Stocks'])
 
 fiis = ['AIEC11.SA','CACR11.SA','KIVO11.SA']
 stock = ['CPLE6.SA','PETR4.SA']
+time_period = ['1d','5d','1mo','3mo','y','2y','Max']
 
 
 if asset_type == 'FIIs':
-    asset = st.sidebar.selectbox('What fii do you want to forecast?',fiis,index=None)
+    asset = st.sidebar.selectbox('What fii do you want to forecast?',fiis)
 else:
-    asset = st.sidebar.selectbox('What stock do you want to forecast?',stock,index=None)
+    asset = st.sidebar.selectbox('What stock do you want to forecast?',stock)
 
-data_time = st.sidebar.radio('Time to show',['1d','5d','1mo','12mo','2y','Max'])
+data_time = st.sidebar.radio('Time to show',['1mo','3mo','12mo','2y','Max'])
 
 st.write(asset)
-stock_data = yf.Ticker(asset).history("Max")
+stock_data = yf.Ticker(asset).history(data_time)
 training = stock_data.reset_index()
 training['Date'] = training['Date'].dt.date
 columns = ['Date','Close']
